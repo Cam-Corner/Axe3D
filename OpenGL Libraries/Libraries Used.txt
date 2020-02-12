@@ -1,0 +1,6 @@
+CMAKE (For compiling Libraries)
+
+........
+
+GLFW - OpenGL
+GLAD - (OpenGL Stuff)
