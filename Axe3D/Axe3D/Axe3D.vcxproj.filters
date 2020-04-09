@@ -16,21 +16,68 @@
     <Filter Include="Source Files\Renderer">
       <UniqueIdentifier>{e3f8f06b-598a-4ada-a1a5-155d116a6ade}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Renderer">
+      <UniqueIdentifier>{2b61d7f9-cb0a-4f22-8071-70a1a85bc050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Mesh">
+      <UniqueIdentifier>{960085dd-36b0-43a9-a2f5-5986d5f53d57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh">
+      <UniqueIdentifier>{d82db193-4448-46e3-b992-047884bcbad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImportedLibs">
+      <UniqueIdentifier>{dd9fe4c3-cca9-413c-9ef5-2e71e400f168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImportedLibs">
+      <UniqueIdentifier>{993deff2-600a-487f-9970-36e5fc52d75f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderWindow.cpp">
+    <ClCompile Include="Other\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Other\glad.c">
+    <ClCompile Include="RenderWindow.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Source Files\ImportedLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="renderWindow.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderWindow.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files\ImportedLibs</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Axe3D.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

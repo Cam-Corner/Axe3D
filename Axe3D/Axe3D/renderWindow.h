@@ -1,33 +1,47 @@
 #pragma once
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include "Shader.h"
+#include "Camera.h"
 
 namespace axe
 {
-	class renderWindow
+	class RenderWindow
 	{
 	public:
 		//constructor / deconstructor 
-		renderWindow(int fscreenWidth, int fscreenHeight, std::string fwindowName);
-		~renderWindow();
-		void clear();
-		void clear(float fred, float fgreen, float fblue, float falpha);
-		void swapBuffers();
+		RenderWindow(int fScreenWidth, int fScreenHeight, std::string fWindowName);
+		~RenderWindow();
+		bool IsOpen();
+		void Clear();
+		void Clear(float fRed, float fGreen, float fBlue, float fAlpha);
+		void SwapBuffers();
+
+		GLFWwindow* GetGLFWWindow() 
+		{
+			if (m_Window != NULL)
+			{
+				return m_Window;
+			}
+			else
+			{
+				return NULL;
+			}
+		}
 
 	private:
-		GLFWwindow* window; //GLFW Winow
-		
-		int screenWidth{ 720 };//stores the screen width
-		int screenHeight{ 480 };//stores the screen height
-		
+		GLFWwindow* m_Window; //GLFW Window
 
-		bool setupGLFW(std::string fwindowName);//sets up GLFW
-		//bool setupGlad();
+		int m_ScreenWidth{ 720 };//stores the screen width
+		int m_ScreenHeight{ 480 };//stores the screen height
 
-		void clampValue(float min, float max, float& value);
-		void clampValue(int min, int max, int& value);
+		bool SetupGLFW(std::string fWindowName);//sets up GLFW
+		bool SetupGlad();//sets up GLAD
+
+		void ClampValue(float fMin, float fMax, float& fValue);
+		void ClampValue(int fMin, int fMax, int& fValue);
+
 
 	};
 }
-
-
