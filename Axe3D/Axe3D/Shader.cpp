@@ -135,7 +135,7 @@ namespace axe
 
 	void Shader::SetFloat(std::string fVariableName, float fValue) const
 	{
-
+		glUniform1f(glGetUniformLocation(m_ShaderProgramID, fVariableName.c_str()), fValue);
 	}
 
 	void Shader::SetMat4(std::string fUniformName, glm::mat4& fMat4) const

@@ -1,0 +1,13 @@
+# CMake generation dependency list for this directory.
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckCSourceCompiles.cmake
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckFunctionExists.c
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckFunctionExists.cmake
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckIncludeFile.c.in
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckIncludeFile.cmake
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckIncludeFileCXX.cmake
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckTypeSize.c.in
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/CheckTypeSize.cmake
+E:/University/Final Year Project/assimp-5.0.0/build/CMakeFiles/CheckTypeSize/OFF64_T.c
+E:/University/Final Year Project/assimp-5.0.0/contrib/zlib/CMakeLists.txt
+E:/University/Final Year Project/assimp-5.0.0/contrib/zlib/zconf.h.cmakein
+E:/University/Final Year Project/assimp-5.0.0/contrib/zlib/zlib.pc.cmakein

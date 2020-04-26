@@ -1,35 +1,46 @@
 #pragma once
-#include <string>
+#include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
+#include "Shader.h"
 
-class Mesh
+namespace axe
 {
-private:
-	struct sVertices
+	struct sVertex
 	{
 		glm::vec3 Position{ 0, 0, 0 };
-		glm::vec2 TextCoords{ 0, 0 };
+		glm::vec3 Normal{ 0, 0, 0 };
+		glm::vec2 TextureCoords{ 0, 0 };
 	};
 
+	struct sTexture
+	{
+		unsigned int ID;
+		std::string Type;
+		std::string Path;
+	};
 
-public:
-	Mesh();
-	~Mesh();
+	class Mesh
+	{
+	public:
+		Mesh(std::vector<sVertex> Vertices, std::vector<unsigned int> Indices, std::vector<sTexture> Textures);
+		~Mesh();
 
-	bool LoadModel(std::string fLocation);
-	bool SetupVertices(const float fVerticePositions[], const float fVerticeTextCoords, const unsigned int fArraySize);
-	bool SetupIndices(const unsigned int fIndices[], const unsigned int fArraySize);
-	void Draw();
+		std::vector<sVertex> _Vertices;
+		std::vector<unsigned int> _Indices;
+		std::vector<sTexture> _Textures;
 
-protected:
-	unsigned int m_VBO, m_VAO, m_EBO;
-	std::vector<sVertices> m_Vertices;
-	std::vector<unsigned int> m_Indices;
+		void Draw(axe::Shader Shader);
 
-private:
-	bool m_UsingEBO{ false };
+	protected:
 
-	
-};
+
+
+	private:
+
+		unsigned int _VAO, _VBO, _EBO;
+
+		void SetupMesh();
+	};
+}
 

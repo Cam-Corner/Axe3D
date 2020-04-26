@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Renderer">
-      <UniqueIdentifier>{e3f8f06b-598a-4ada-a1a5-155d116a6ade}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Renderer">
-      <UniqueIdentifier>{2b61d7f9-cb0a-4f22-8071-70a1a85bc050}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Mesh">
       <UniqueIdentifier>{960085dd-36b0-43a9-a2f5-5986d5f53d57}</UniqueIdentifier>
     </Filter>
@@ -31,27 +25,63 @@
     <Filter Include="Source Files\ImportedLibs">
       <UniqueIdentifier>{993deff2-600a-487f-9970-36e5fc52d75f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{fad582d7-35ef-4384-b8a8-ad5cb5070135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{472da6bc-54c4-4a56-92c1-81fc1d86d5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window">
+      <UniqueIdentifier>{32996e39-d53a-43e0-99de-54f56ec6612e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window\Renderer">
+      <UniqueIdentifier>{2b61d7f9-cb0a-4f22-8071-70a1a85bc050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window\Input">
+      <UniqueIdentifier>{01cd69ce-8bb5-453e-a0a1-7fd9ba273c6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{28dde964-fceb-426a-b6ae-6fd10e6a74f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window\Renderer">
+      <UniqueIdentifier>{e3f8f06b-598a-4ada-a1a5-155d116a6ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window\Input">
+      <UniqueIdentifier>{72f43c87-74ce-4f9b-8a5f-d524508a7f3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Other\glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RenderWindow.cpp">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\Window\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Mesh</Filter>
+      <Filter>Source Files\Window\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files\ImportedLibs</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Other\glad.c">
+      <Filter>Source Files\ImportedLibs</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\Window\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputKey.cpp">
+      <Filter>Source Files\Window\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,18 +90,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderWindow.h">
-      <Filter>Header Files\Renderer</Filter>
+      <Filter>Header Files\Window\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Mesh</Filter>
+      <Filter>Header Files\Window\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files\ImportedLibs</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Window\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonEnums.h">
+      <Filter>Header Files\Window\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputKey.h">
+      <Filter>Header Files\Window\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,5 +124,13 @@
     <ResourceCompile Include="Axe3D.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\FragmentShader.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Shaders\VertexShader.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

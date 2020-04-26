@@ -10,19 +10,52 @@ namespace axe
 	class RenderWindow
 	{
 	public:
-		//constructor / deconstructor 
-		RenderWindow(int fScreenWidth, int fScreenHeight, std::string fWindowName);
-		~RenderWindow();
-		bool IsOpen();
-		void Clear();
-		void Clear(float fRed, float fGreen, float fBlue, float fAlpha);
-		void SwapBuffers();
+		RenderWindow(const RenderWindow&) = delete;
 
-		GLFWwindow* GetGLFWWindow() 
+		//Get instance of this class(because its a singleton)
+		static RenderWindow& Get()
 		{
-			if (m_Window != NULL)
+			static RenderWindow _Window;
+			return _Window;
+		}
+
+		// deconstructor 
+		~RenderWindow();
+
+		static bool Create(int ScreenWidth, int ScreenHeight, std::string WindowName) { return Get().CreateImp(ScreenWidth, ScreenHeight, WindowName); }
+		static bool HasWindow() { return Get()._HasWindow; }
+
+	private:
+		//constructor
+		RenderWindow() { }
+		bool _HasWindow{ false };
+		bool CreateImp(int ScreenWidth, int ScreenHeight, std::string WindowName);
+
+	public:
+		
+		static bool IsOpen() { return Get().IsOpenImp(); }
+		static void Clear() { Get().ClearImp(); }
+		static void Clear(float Red, float Green, float Blue, float Alpha) { Get().ClearImp(Red, Green, Blue, Alpha); }
+		static void SwapBuffers() { return Get().SwapBuffersImp(); }
+		static GLFWwindow* GetGLFWWindow() { return Get().GetGLFWWindowImp(); }
+		static void UpdateInput() { Get().UpdateInputImp(); }
+		static glm::vec2 MousePosition() { return Get().MousePositionImp(); }
+		static double GetMouseXOffset() { return Get().GetMouseXOffsetImp(); }
+		static double GetMouseYOffset() { return Get().GetMouseYOffsetImp(); }
+		static glm::vec2 GetScreenResolution() { return Get().GetScreenResolutionImp(); }
+
+	private:
+		bool IsOpenImp();
+		void ClearImp();
+		void ClearImp(float Red, float Green, float Blue, float Alpha);
+		void SwapBuffersImp();
+		glm::vec2 GetScreenResolutionImp() { return glm::vec2(_ScreenWidth, _ScreenHeight); }
+
+		GLFWwindow* GetGLFWWindowImp()
+		{
+			if (_Window != NULL)
 			{
-				return m_Window;
+				return _Window;
 			}
 			else
 			{
@@ -30,18 +63,32 @@ namespace axe
 			}
 		}
 
-	private:
-		GLFWwindow* m_Window; //GLFW Window
+		///<summary>
+		///*Updates the mouse movement
+		///</summary>
+		void UpdateInputImp();
 
-		int m_ScreenWidth{ 720 };//stores the screen width
-		int m_ScreenHeight{ 480 };//stores the screen height
+		glm::vec2 MousePositionImp();
+		double GetMouseXOffsetImp();
+		double GetMouseYOffsetImp();
+				
+		GLFWwindow* _Window; //GLFW Window
 
-		bool SetupGLFW(std::string fWindowName);//sets up GLFW
+		int _ScreenWidth{ 720 };//stores the screen width
+		int _ScreenHeight{ 480 };//stores the screen height
+
+		bool SetupGLFW(std::string WindowName);//sets up GLFW
 		bool SetupGlad();//sets up GLAD
+		void SetOpenGLSettings();
 
-		void ClampValue(float fMin, float fMax, float& fValue);
-		void ClampValue(int fMin, int fMax, int& fValue);
+		void ClampValue(float Min, float Max, float& Value);
+		void ClampValue(int Min, int Max, int& Value);
 
-
+		//Mouse Variables
+		bool _DoneMouseSetup{ false };
+		double _LastMouseXPos{ 0 };
+		double _LastMouseYPos{ 0 };
+		double _MouseXOffset{ 0 };
+		double _MouseYOffset{ 0 };
 	};
 }

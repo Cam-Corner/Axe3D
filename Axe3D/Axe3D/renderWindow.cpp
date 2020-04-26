@@ -3,20 +3,28 @@
 
 namespace axe
 {
-	RenderWindow::RenderWindow(int fScreenWidth, int fScreenHeight, std::string fWindowName)
+	bool RenderWindow::CreateImp(int ScreenWidth, int ScreenHeight, std::string WindowName)
 	{
-		m_ScreenWidth = fScreenWidth;
-		m_ScreenHeight = fScreenHeight;
-
-		if (!SetupGLFW(fWindowName))
+		if (!_HasWindow)
 		{
+			_ScreenWidth = ScreenWidth;
+			_ScreenHeight = ScreenHeight;
 
+			if (!SetupGLFW(WindowName))
+			{
+
+			}
+
+			if (!SetupGlad())
+			{
+				glfwTerminate();
+			}
+
+			_HasWindow = true;
+			return true;
 		}
 
-		if (!SetupGlad())
-		{
-			glfwTerminate();
-		}
+		return false;
 	}
 
 	RenderWindow::~RenderWindow()
@@ -24,9 +32,9 @@ namespace axe
 
 	}
 
-	bool RenderWindow::IsOpen()
+	bool RenderWindow::IsOpenImp()
 	{
-		if (glfwWindowShouldClose(m_Window))
+		if (glfwWindowShouldClose(_Window))
 		{
 			glfwTerminate();
 			return false;
@@ -35,13 +43,25 @@ namespace axe
 		return true;
 	}
 
-	void framebuffer_size_callback(GLFWwindow* fWindow, int fWidth, int fHeight)
+	void framebuffer_size_callback(GLFWwindow* Window, int Width, int Height)
 	{
-		glViewport(0, 0, fWidth, fHeight);
+		glViewport(0, 0, Width, Height);
 
 	}
+	
+	float LastXVal, LastYVal;
 
-	bool RenderWindow::SetupGLFW(std::string fWindowName)
+	void mouse_CallbackImp(GLFWwindow* Window, double NewXpos, double NewYpos)
+	{
+		float OffsetX = LastXVal - NewXpos;
+		float OffsetY = LastYVal - NewYpos;
+		std::cout << "\n" << OffsetX << ", " << OffsetY;
+
+		LastXVal = NewXpos;
+		LastYVal = NewYpos;
+	}
+
+	bool RenderWindow::SetupGLFW(std::string WindowName)
 	{
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -50,19 +70,26 @@ namespace axe
 
 
 		//creating GLFW Window
-		m_Window = glfwCreateWindow(m_ScreenWidth, m_ScreenHeight, fWindowName.c_str(), NULL, NULL); //creates the window
-		if (m_Window == NULL)//checks to see if the window was able to be created
+		_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, WindowName.c_str(), NULL, NULL); //creates the window
+		if (_Window == NULL)//checks to see if the window was able to be created
 		{
 			std::cout << "RENDER::WINDOW::ERROR: FAILED TO CREATE GLFW WINDOW! \n";
 			glfwTerminate();
 			return false;
 		}
-		glfwMakeContextCurrent(m_Window);
+		glfwMakeContextCurrent(_Window);
 
 		//glViewport(0, 0, screenWidth, screenHeight);
-		glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
+		glfwSetFramebufferSizeCallback(_Window, framebuffer_size_callback);
+		//glfwSetCursorPosCallback(m_Window, mouse_Callback);
+		glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		double StartMouseX, StartMouseY;
+		glfwGetCursorPos(_Window, &StartMouseX, &StartMouseY);
 
-		//glEnable(GL_DEPTH_TEST);
+		_LastMouseXPos = (float)StartMouseX;
+		_LastMouseYPos = (float)StartMouseY;
+
+		
 
 
 		return true;
@@ -75,57 +102,115 @@ namespace axe
 			std::cout << "RENDER::WINDOW::ERROR: FAILED TO INITIALIZE  GLAD! \n";
 			return false;
 		}
-
+		
+		SetOpenGLSettings();
 		return true;
 	}
 
-	void RenderWindow::Clear()
+	void RenderWindow::SetOpenGLSettings()
 	{
-		glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clear the screen to a colour
+		glEnable(GL_DEPTH_TEST);
+		//glDepthMask(GL_FALSE);
+		glDepthFunc(GL_LESS);
+		
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		
+		glEnable(GL_STENCIL_TEST);
+
 	}
 
-	void RenderWindow::Clear(float fRed, float fGreen, float fBlue, float fAlpha)
+	void RenderWindow::ClearImp()
 	{
-		ClampValue(0, 1, fRed);
-		ClampValue(0, 1, fGreen);
-		ClampValue(0, 1, fBlue);
-		ClampValue(0, 1, fAlpha);
+		glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);// Clear the screen to a colour
+	}
 
-		glClearColor(fRed, fGreen, fBlue, fAlpha);// Clear the screen to a colour
+	void RenderWindow::ClearImp(float Red, float Green, float Blue, float Alpha)
+	{
+		ClampValue(0, 1, Red);
+		ClampValue(0, 1, Green);
+		ClampValue(0, 1, Blue);
+		ClampValue(0, 1, Alpha);
+
+		glClearColor(Red, Green, Blue, Alpha);// Clear the screen to a colour
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void RenderWindow::SwapBuffers()
+	void RenderWindow::SwapBuffersImp()
 	{
 		//Check and call events and swap buffers
-		glfwSwapBuffers(m_Window);
+		glfwSwapBuffers(_Window);
 		glfwPollEvents();
+		
 	}
 
-	void RenderWindow::ClampValue(float fMin, float fMax, float& fValue)
+	
+	void RenderWindow::UpdateInputImp()
 	{
-		if (fValue < fMin)
+		
+		double CurrentMouseX, CurrentMouseY;
+		glfwGetCursorPos(_Window, &CurrentMouseX, &CurrentMouseY);
+
+		_MouseXOffset = _LastMouseXPos - CurrentMouseX;
+		_MouseYOffset = _LastMouseYPos - CurrentMouseY;
+		
+		_LastMouseXPos = CurrentMouseX;
+		_LastMouseYPos = CurrentMouseY;
+
+		if (glfwGetKey(_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		{
-			fValue = fMin;
+			glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
-		if (fValue > fMax)
+		if (glfwGetMouseButton(_Window, GLFW_MOUSE_BUTTON_LEFT))
 		{
-			fValue = fMax;
+			glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+	}
+	
+
+	double RenderWindow::GetMouseXOffsetImp()
+	{
+		return _MouseXOffset;
+	}
+
+	double RenderWindow::GetMouseYOffsetImp()
+	{
+		return _MouseYOffset;
+	}
+
+	glm::vec2 RenderWindow::MousePositionImp()
+	{
+		double CurrentMouseX, CurrentMouseY;
+		glfwGetCursorPos(_Window, &CurrentMouseX, &CurrentMouseY);
+
+		return glm::vec2(CurrentMouseX, CurrentMouseY);
+	}
+
+	void RenderWindow::ClampValue(float Min, float Max, float& Value)
+	{
+		if (Value < Min)
+		{
+			Value = Min;
+		}
+
+		if (Value > Max)
+		{
+			Value = Max;
 		}
 	}
 
-	void RenderWindow::ClampValue(int fMin, int fMax, int& fValue)
+	void RenderWindow::ClampValue(int Min, int Max, int& Value)
 	{
-		if (fValue < fMin)
+		if (Value < Min)
 		{
-			fValue = fMin;
+			Value = Min;
 		}
 
-		if (fValue > fMax)
+		if (Value > Max)
 		{
-			fValue = fMax;
+			Value = Max;
 		}
 	}
 }

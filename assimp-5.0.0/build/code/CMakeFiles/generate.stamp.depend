@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/FindPackageHandleStandardArgs.cmake
+E:/Other/C++ Projects/CMake/share/cmake-3.15/Modules/FindPackageMessage.cmake
+E:/University/Final Year Project/assimp-5.0.0/cmake-modules/FindRT.cmake
+E:/University/Final Year Project/assimp-5.0.0/code/CMakeLists.txt

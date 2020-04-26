@@ -25,7 +25,11 @@ namespace axe
 
 	void Camera::SetRotation(const glm::vec3 fRotation)
 	{
-		//
+		glm::vec3 Direction{ 0, 0, 0 };
+		Direction.x = cos(glm::radians(fRotation.y)) * cos(glm::radians(fRotation.x));
+		Direction.y = sin(glm::radians(fRotation.x));
+		Direction.z = sin(glm::radians(fRotation.y)) * cos(glm::radians(fRotation.x));
+		m_ForwardVector = glm::normalize(Direction);
 	}
 
 	glm::vec3 Camera::GetRightVector()

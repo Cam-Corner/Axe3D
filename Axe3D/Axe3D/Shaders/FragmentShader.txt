@@ -2,14 +2,52 @@
 
 out vec4 FragmentColour;
 
-in vec2 TextCoords;
-uniform sampler2D Texture1;
-uniform sampler2D Texture2;
+struct sMaterial
+{
+	sampler2D Texture_Diffuse1;
+	sampler2D Texture_Diffuse2;
+	sampler2D Texture_Diffuse3;
+	sampler2D Texture_Diffuse4;
+	sampler2D Texture_Diffuse5;
+	sampler2D Texture_Diffuse6;
+	
+	sampler2D Texture_Specular1;
+	sampler2D Texture_Specular2;
+	sampler2D Texture_Specular3;
+	sampler2D Texture_Specular4;
+	sampler2D Texture_Specular5;
+	sampler2D Texture_Specular6;
+};
 
+int AmountOfDiffuse = 6;
+int AmountOfSpecular = 6;
+
+uniform sampler2D Texture_Diffuse1;
+
+uniform sMaterial Material;
+
+in vec2 TextCoords;
+
+vec4 AddTextures();
 void main()
 {
 	//FragmentColour = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 	
-	FragmentColour = mix(texture(Texture1, TextCoords), texture(Texture2, TextCoords), 0.1);
+	
+	
+	FragmentColour = AddTextures();
 	
 }
+
+vec4 AddTextures()
+{
+	vec4 FinalColour;
+	
+	FinalColour = texture(Material.Texture_Diffuse1, TextCoords);
+	
+	FinalColour = texture(Material.Texture_Specular1, TextCoords);
+	
+	return FinalColour;
+}
+
+
