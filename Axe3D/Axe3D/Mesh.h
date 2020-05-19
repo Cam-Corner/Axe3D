@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "Shader.h"
 
-namespace axe
+namespace Axe
 {
 	struct sVertex
 	{
@@ -30,7 +30,7 @@ namespace axe
 		std::vector<unsigned int> _Indices;
 		std::vector<sTexture> _Textures;
 
-		void Draw(axe::Shader Shader);
+		void Draw(Axe::Shader Shader);
 
 	protected:
 

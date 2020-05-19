@@ -5,7 +5,7 @@
 #include "Shader.h"
 #include "Camera.h"
 
-namespace axe
+namespace Axe
 {
 	class RenderWindow
 	{
@@ -38,11 +38,14 @@ namespace axe
 		static void Clear(float Red, float Green, float Blue, float Alpha) { Get().ClearImp(Red, Green, Blue, Alpha); }
 		static void SwapBuffers() { return Get().SwapBuffersImp(); }
 		static GLFWwindow* GetGLFWWindow() { return Get().GetGLFWWindowImp(); }
-		static void UpdateInput() { Get().UpdateInputImp(); }
-		static glm::vec2 MousePosition() { return Get().MousePositionImp(); }
-		static double GetMouseXOffset() { return Get().GetMouseXOffsetImp(); }
-		static double GetMouseYOffset() { return Get().GetMouseYOffsetImp(); }
+
 		static glm::vec2 GetScreenResolution() { return Get().GetScreenResolutionImp(); }
+		static Axe::Camera* GetActiveCamera() { return Get().GetActiveCameraImp(); }
+		static void SetActiveCamera(Axe::Camera* Camera) { Get()._ActiveCamera = Camera; }
+		
+		//window Settings
+		static void SetWindowResolution(unsigned int Width, unsigned int Height) { Get().SetWindowResolutionImp(Width, Height); }
+		static void SetFullScreen(bool Value) { Get().SetFullScreenImp(Value); }
 
 	private:
 		bool IsOpenImp();
@@ -50,6 +53,12 @@ namespace axe
 		void ClearImp(float Red, float Green, float Blue, float Alpha);
 		void SwapBuffersImp();
 		glm::vec2 GetScreenResolutionImp() { return glm::vec2(_ScreenWidth, _ScreenHeight); }
+
+		Axe::Camera* GetActiveCameraImp() { if (_ActiveCamera != NULL) return _ActiveCamera; }
+
+		//WindowSettings
+		void SetWindowResolutionImp(unsigned int Width, unsigned int Height);
+		void SetFullScreenImp(bool Value);
 
 		GLFWwindow* GetGLFWWindowImp()
 		{
@@ -63,15 +72,6 @@ namespace axe
 			}
 		}
 
-		///<summary>
-		///*Updates the mouse movement
-		///</summary>
-		void UpdateInputImp();
-
-		glm::vec2 MousePositionImp();
-		double GetMouseXOffsetImp();
-		double GetMouseYOffsetImp();
-				
 		GLFWwindow* _Window; //GLFW Window
 
 		int _ScreenWidth{ 720 };//stores the screen width
@@ -84,11 +84,6 @@ namespace axe
 		void ClampValue(float Min, float Max, float& Value);
 		void ClampValue(int Min, int Max, int& Value);
 
-		//Mouse Variables
-		bool _DoneMouseSetup{ false };
-		double _LastMouseXPos{ 0 };
-		double _LastMouseYPos{ 0 };
-		double _MouseXOffset{ 0 };
-		double _MouseYOffset{ 0 };
+		Axe::Camera* _ActiveCamera;
 	};
 }

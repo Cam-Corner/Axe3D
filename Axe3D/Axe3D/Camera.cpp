@@ -1,7 +1,9 @@
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include "RenderWindow.h"
 
-namespace axe
+namespace Axe
 {
 	Camera::Camera()
 	{
@@ -53,5 +55,15 @@ namespace axe
 		glm::mat4 ViewMatrix = glm::lookAt(m_Position, m_Position + m_ForwardVector, m_UpVector);
 
 		return ViewMatrix;
+	}
+
+	glm::mat4 Camera::GetProjectionMatrix()
+	{
+		float ScreenWidth = Axe::RenderWindow::GetScreenResolution().x;
+		float ScreenHeight = Axe::RenderWindow::GetScreenResolution().y;
+
+		glm::mat4 Projection = glm::perspective(glm::radians(70.0f), ScreenWidth / ScreenHeight, 0.1f, 10000.0f);
+
+		return Projection;
 	}
 }

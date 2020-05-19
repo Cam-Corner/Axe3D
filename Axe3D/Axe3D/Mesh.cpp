@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "RenderWindow.h"
 
-namespace axe
+namespace Axe
 {
 	Mesh::Mesh(std::vector<sVertex> Vertices, std::vector<unsigned int> Indices, std::vector<sTexture> Textures)
 	{
@@ -51,7 +51,7 @@ namespace axe
 		glBindVertexArray(0);
 	}
 
-	void Mesh::Draw(axe::Shader Shader)
+	void Mesh::Draw(Axe::Shader Shader)
 	{
 		unsigned int DiffuseNum = 1;
 		unsigned int SpecularNum = 1;

@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace axe
+namespace Axe
 {
 	Shader::Shader(std::string fVertexShaderLocation, std::string fFragmentShaderLocation)
 	{

@@ -144,26 +144,35 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="InputKey.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InputMouseButton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Other\glad.c" />
     <ClCompile Include="RenderWindow.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="SandboxApp.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AxeAPI.h" />
     <ClInclude Include="ButtonEnums.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="InputKey.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputMouseButton.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="SandboxApp.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace axe
+namespace Axe
 {
 	enum KeyCode
 	{
@@ -131,5 +131,13 @@ namespace axe
 		EXTRA_BUTTON3 = 5,
 		EXTRA_BUTTON4 = 6,
 		LAST_BUTTON = 7,
+	};
+
+	enum KeyState
+	{
+		OnPressed, // the frame the key was pressed
+		Repeat, // if the key is being held down
+		OnReleased, // the frame the key was released
+		None, // if the key isn't being held down or pressed
 	};
 }

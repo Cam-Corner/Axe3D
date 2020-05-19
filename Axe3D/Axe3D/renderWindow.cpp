@@ -1,7 +1,7 @@
 #include "RenderWindow.h"
 #include <iostream>
 
-namespace axe
+namespace Axe
 {
 	bool RenderWindow::CreateImp(int ScreenWidth, int ScreenHeight, std::string WindowName)
 	{
@@ -48,18 +48,7 @@ namespace axe
 		glViewport(0, 0, Width, Height);
 
 	}
-	
-	float LastXVal, LastYVal;
 
-	void mouse_CallbackImp(GLFWwindow* Window, double NewXpos, double NewYpos)
-	{
-		float OffsetX = LastXVal - NewXpos;
-		float OffsetY = LastYVal - NewYpos;
-		std::cout << "\n" << OffsetX << ", " << OffsetY;
-
-		LastXVal = NewXpos;
-		LastYVal = NewYpos;
-	}
 
 	bool RenderWindow::SetupGLFW(std::string WindowName)
 	{
@@ -80,17 +69,7 @@ namespace axe
 		glfwMakeContextCurrent(_Window);
 
 		//glViewport(0, 0, screenWidth, screenHeight);
-		glfwSetFramebufferSizeCallback(_Window, framebuffer_size_callback);
-		//glfwSetCursorPosCallback(m_Window, mouse_Callback);
-		glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		double StartMouseX, StartMouseY;
-		glfwGetCursorPos(_Window, &StartMouseX, &StartMouseY);
-
-		_LastMouseXPos = (float)StartMouseX;
-		_LastMouseYPos = (float)StartMouseY;
-
-		
-
+		glfwSetFramebufferSizeCallback(_Window, framebuffer_size_callback);;
 
 		return true;
 	}
@@ -145,49 +124,6 @@ namespace axe
 		
 	}
 
-	
-	void RenderWindow::UpdateInputImp()
-	{
-		
-		double CurrentMouseX, CurrentMouseY;
-		glfwGetCursorPos(_Window, &CurrentMouseX, &CurrentMouseY);
-
-		_MouseXOffset = _LastMouseXPos - CurrentMouseX;
-		_MouseYOffset = _LastMouseYPos - CurrentMouseY;
-		
-		_LastMouseXPos = CurrentMouseX;
-		_LastMouseYPos = CurrentMouseY;
-
-		if (glfwGetKey(_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		{
-			glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-
-		if (glfwGetMouseButton(_Window, GLFW_MOUSE_BUTTON_LEFT))
-		{
-			glfwSetInputMode(_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
-	}
-	
-
-	double RenderWindow::GetMouseXOffsetImp()
-	{
-		return _MouseXOffset;
-	}
-
-	double RenderWindow::GetMouseYOffsetImp()
-	{
-		return _MouseYOffset;
-	}
-
-	glm::vec2 RenderWindow::MousePositionImp()
-	{
-		double CurrentMouseX, CurrentMouseY;
-		glfwGetCursorPos(_Window, &CurrentMouseX, &CurrentMouseY);
-
-		return glm::vec2(CurrentMouseX, CurrentMouseY);
-	}
-
 	void RenderWindow::ClampValue(float Min, float Max, float& Value)
 	{
 		if (Value < Min)
@@ -211,6 +147,25 @@ namespace axe
 		if (Value > Max)
 		{
 			Value = Max;
+		}
+	}
+
+	void RenderWindow::SetWindowResolutionImp(unsigned int Width, unsigned int Height)
+	{
+		_ScreenWidth = Width;
+		_ScreenHeight = Height;
+		glfwSetWindowSize(_Window, _ScreenWidth, _ScreenHeight);
+	}
+
+	void RenderWindow::SetFullScreenImp(bool Value)
+	{
+		if (Value)
+		{
+			glfwSetWindowMonitor(_Window, glfwGetPrimaryMonitor(), 0, 0, _ScreenWidth, _ScreenHeight, GLFWvidmode().refreshRate);
+		}
+		else
+		{
+			glfwSetWindowMonitor(_Window, 0, 0, 0, _ScreenWidth, _ScreenHeight, GLFWvidmode().refreshRate);
 		}
 	}
 }

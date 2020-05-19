@@ -7,17 +7,24 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-namespace axe
+
+namespace Axe
 {
 	class Model
 	{
 	public:
-		Model();
-		Model(std::string* Path);
 		~Model();
+		Model();
+		friend class ModelManager;
+		friend class StaticMesh;
+
+	private:
+		Model(std::string* Path);
+
+		void Draw(Axe::Shader Shader);
 
 		void Load(std::string* Path);
-		void Draw(axe::Shader Shader);
+
 
 	protected:
 

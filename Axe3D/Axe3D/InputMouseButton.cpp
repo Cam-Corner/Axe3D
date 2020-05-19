@@ -1,39 +1,28 @@
-#include "InputKey.h"
+#include "InputMouseButton.h"
 #include "RenderWindow.h"
-#include <iostream>
 
 namespace Axe
 {
-	InputKey::InputKey(Axe::KeyCode KeyCode)
-	{
-		_KeyCode = KeyCode;
-	}
-
-	InputKey::~InputKey()
-	{
-
-	}
-
-	bool InputKey::KeyDown()
+	bool InputMouseButton::ButtonDown()
 	{
 		return _KeyState == KeyState::OnPressed;
 	}
 
-	bool InputKey::KeyUp()
+	bool InputMouseButton::ButtonUp()
 	{
 		return _KeyState == KeyState::OnReleased;
 	}
 
-	bool InputKey::KeyRepeat()
-	{		
+	bool InputMouseButton::ButtonRepeat()
+	{
 		return _KeyState == KeyState::Repeat || _KeyState == KeyState::OnPressed;
 	}
 
-	void InputKey::Update()
+	void InputMouseButton::Update()
 	{
 		if (_KeyState == KeyState::None)
 		{
-			if (glfwGetKey(Axe::RenderWindow::GetGLFWWindow(), _KeyCode) == GLFW_PRESS)
+			if (glfwGetMouseButton(Axe::RenderWindow::GetGLFWWindow(), _MouseButton) == GLFW_PRESS)
 			{
 				_KeyState = KeyState::OnPressed;
 			}
@@ -44,7 +33,7 @@ namespace Axe
 		}
 		else if (_KeyState == KeyState::Repeat)
 		{
-			bool flag = glfwGetKey(Axe::RenderWindow::GetGLFWWindow(), _KeyCode) == GLFW_RELEASE;
+			bool flag = glfwGetMouseButton(Axe::RenderWindow::GetGLFWWindow(), _MouseButton) == GLFW_RELEASE;
 
 			if (flag)
 			{

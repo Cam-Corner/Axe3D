@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 
 
-namespace axe
+namespace Axe
 {
 	std::vector<sTexture> Textures_Loaded;
 
@@ -112,7 +112,7 @@ namespace axe
 
 		}
 
-		return axe::Mesh(Vertices, Indices, Textures);
+		return Axe::Mesh(Vertices, Indices, Textures);
 	}
 
 	std::vector<sTexture> Model::LoadMaterialTextures(aiMaterial* Material, aiTextureType Type, std::string TypeName)
@@ -148,13 +148,12 @@ namespace axe
 		return Textures;
 	}
 
-	void Model::Draw(axe::Shader Shader)
+	void Model::Draw(Axe::Shader Shader)
 	{
 		if (_Meshes.size() > 0)
 		{
 			for (auto M : _Meshes)
 			{
-
 				M.Draw(Shader);
 			}
 		}

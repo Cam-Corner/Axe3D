@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\Mesh">
       <UniqueIdentifier>{960085dd-36b0-43a9-a2f5-5986d5f53d57}</UniqueIdentifier>
     </Filter>
@@ -49,6 +45,10 @@
     <Filter Include="Source Files\Window\Input">
       <UniqueIdentifier>{72f43c87-74ce-4f9b-8a5f-d524508a7f3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,7 +82,19 @@
       <Filter>Source Files\Window\Input</Filter>
     </ClCompile>
     <ClCompile Include="ModelManager.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files\Window\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SandboxApp.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMouseButton.cpp">
+      <Filter>Source Files\Window\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,20 +129,35 @@
       <Filter>Header Files\Window\Input</Filter>
     </ClInclude>
     <ClInclude Include="ModelManager.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files\Window\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SandboxApp.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AxeAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMouseButton.h">
+      <Filter>Header Files\Window\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Axe3D.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files\Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shaders\FragmentShader.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files\Resource Files</Filter>
     </Text>
     <Text Include="Shaders\VertexShader.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files\Resource Files</Filter>
     </Text>
   </ItemGroup>
 </Project>

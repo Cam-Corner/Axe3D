@@ -2,12 +2,13 @@
 #include <string>
 #include <glm/glm.hpp>
 
-namespace axe
+namespace Axe
 {
 	class Shader
 	{
 	public:
 		Shader(std::string fVertexShaderLocation, std::string fFragmentShaderLocation);
+		Shader() {}
 		~Shader();
 		void UseProgram();
 		

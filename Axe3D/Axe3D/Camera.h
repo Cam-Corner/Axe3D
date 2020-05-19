@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-namespace axe
+namespace Axe
 {
 	class Camera
 	{
@@ -51,7 +51,7 @@ namespace axe
 		void ClampRoll(float fMin, float fMax);
 
 		glm::mat4 GetViewMatrix();
-		//const glm::mat4 GetProjectionMatrix() { return m_Projection; }
+		glm::mat4 GetProjectionMatrix();
 
 	private:
 		float m_FOV{ 45.0f };

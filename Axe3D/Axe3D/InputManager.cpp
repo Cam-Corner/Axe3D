@@ -3,11 +3,12 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-namespace axe
+namespace Axe
 {
 	InputManager::InputManager()
 	{
 		SetupKeys();
+		glfwSetInputMode(Axe::RenderWindow::GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	bool InputManager::GetKeyDownImp(KeyCode Key)
@@ -40,136 +41,237 @@ namespace axe
 		return false;
 	}
 
+
+	bool InputManager::GetButtonDownImp(MouseButton Button)
+	{
+		if (_MouseButtons.find(Button) != _MouseButtons.end())
+		{
+			return _MouseButtons[Button].ButtonDown();
+		}
+
+		return false;
+	}
+
+	bool InputManager::GetButtonUpImp(MouseButton Button)
+	{
+		if (_MouseButtons.find(Button) != _MouseButtons.end())
+		{
+			return _MouseButtons[Button].ButtonUp();
+		}
+
+		return false;
+	}
+
+	bool InputManager::GetButtonImp(MouseButton Button)
+	{
+		if (_MouseButtons.find(Button) != _MouseButtons.end())
+		{
+			return _MouseButtons[Button].ButtonRepeat();
+		}
+
+		return false;
+	}
+
 	void InputManager::UpdateImp()
 	{
-		for (std::unordered_map<axe::KeyCode, axe::InputKey>::iterator
+		for (std::unordered_map<Axe::KeyCode, Axe::InputKey>::iterator
 			It = _Keys.begin(); It != _Keys.end(); ++It)
 		{
 			It->second.Update();
 		}
+
+		for (std::unordered_map<Axe::MouseButton, Axe::InputMouseButton>::iterator
+			It = _MouseButtons.begin(); It != _MouseButtons.end(); ++It)
+		{
+			It->second.Update();
+		}
+
+		double CurrentMouseX, CurrentMouseY;
+		glfwGetCursorPos(Axe::RenderWindow::GetGLFWWindow(), &CurrentMouseX, &CurrentMouseY);
+
+		_MouseXOffset = _LastMouseXPos - CurrentMouseX;
+		_MouseYOffset = _LastMouseYPos - CurrentMouseY;
+
+		_LastMouseXPos = CurrentMouseX;
+		_LastMouseYPos = CurrentMouseY;
+
+		if (glfwGetKey(Axe::RenderWindow::GetGLFWWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		{
+			glfwSetInputMode(Axe::RenderWindow::GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+
+		if (glfwGetMouseButton(Axe::RenderWindow::GetGLFWWindow(), GLFW_MOUSE_BUTTON_LEFT))
+		{
+			glfwSetInputMode(Axe::RenderWindow::GetGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+	}
+
+	//float LastXVal, LastYVal;
+
+	//void mouse_CallbackImp(GLFWwindow* Window, double NewXpos, double NewYpos)
+	//{
+	//	float OffsetX = LastXVal - NewXpos;
+	//	float OffsetY = LastYVal - NewYpos;
+	//	std::cout << "\n" << OffsetX << ", " << OffsetY;
+
+	//	LastXVal = NewXpos;
+	//	LastYVal = NewYpos;
+	//}
+
+	double InputManager::GetMouseXOffsetImp()
+	{
+		return _MouseXOffset;
+	}
+
+	double InputManager::GetMouseYOffsetImp()
+	{
+		return _MouseYOffset;
+	}
+
+	glm::vec2 InputManager::MousePositionImp()
+	{
+		double CurrentMouseX, CurrentMouseY;
+		glfwGetCursorPos(Axe::RenderWindow::GetGLFWWindow(), &CurrentMouseX, &CurrentMouseY);
+
+		return glm::vec2(CurrentMouseX, CurrentMouseY);
 	}
 
 	void InputManager::SetupKeys()
 	{
-		AddKeyToMap(axe::KeyCode::SPACE);
-		AddKeyToMap(axe::KeyCode::APOSTROPHE);
-		AddKeyToMap(axe::KeyCode::COMMA);
-		AddKeyToMap(axe::KeyCode::MINUS);
-		AddKeyToMap(axe::KeyCode::PERIOD);
-		AddKeyToMap(axe::KeyCode::SLASH);
-		AddKeyToMap(axe::KeyCode::Num0);
-		AddKeyToMap(axe::KeyCode::Num1);
-		AddKeyToMap(axe::KeyCode::Num2);
-		AddKeyToMap(axe::KeyCode::Num3);
-		AddKeyToMap(axe::KeyCode::Num4);
-		AddKeyToMap(axe::KeyCode::Num5);
-		AddKeyToMap(axe::KeyCode::Num6);
-		AddKeyToMap(axe::KeyCode::Num7);
-		AddKeyToMap(axe::KeyCode::Num8);
-		AddKeyToMap(axe::KeyCode::Num9);
-		AddKeyToMap(axe::KeyCode::SEMICOLON);
-		AddKeyToMap(axe::KeyCode::EQUAL);
-		AddKeyToMap(axe::KeyCode::A);
-		AddKeyToMap(axe::KeyCode::B);
-		AddKeyToMap(axe::KeyCode::C);
-		AddKeyToMap(axe::KeyCode::D);
-		AddKeyToMap(axe::KeyCode::E);
-		AddKeyToMap(axe::KeyCode::F);
-		AddKeyToMap(axe::KeyCode::G);
-		AddKeyToMap(axe::KeyCode::H);
-		AddKeyToMap(axe::KeyCode::I);
-		AddKeyToMap(axe::KeyCode::J);
-		AddKeyToMap(axe::KeyCode::K);
-		AddKeyToMap(axe::KeyCode::L);
-		AddKeyToMap(axe::KeyCode::M);
-		AddKeyToMap(axe::KeyCode::N);
-		AddKeyToMap(axe::KeyCode::O);
-		AddKeyToMap(axe::KeyCode::P);
-		AddKeyToMap(axe::KeyCode::Q);
-		AddKeyToMap(axe::KeyCode::R);
-		AddKeyToMap(axe::KeyCode::S);
-		AddKeyToMap(axe::KeyCode::T);
-		AddKeyToMap(axe::KeyCode::U);
-		AddKeyToMap(axe::KeyCode::V);
-		AddKeyToMap(axe::KeyCode::W);
-		AddKeyToMap(axe::KeyCode::X);
-		AddKeyToMap(axe::KeyCode::Y);
-		AddKeyToMap(axe::KeyCode::Z);
-		AddKeyToMap(axe::KeyCode::LEFT_BRACKET);
-		AddKeyToMap(axe::KeyCode::BACKSLASH);
-		AddKeyToMap(axe::KeyCode::RIGHT_BRACKET);
-		AddKeyToMap(axe::KeyCode::ACCENT);
-		AddKeyToMap(axe::KeyCode::ESCAPE);
-		AddKeyToMap(axe::KeyCode::ENTER);
-		AddKeyToMap(axe::KeyCode::TAB);
-		AddKeyToMap(axe::KeyCode::BACKSPACE);
-		AddKeyToMap(axe::KeyCode::INSERT);
-		AddKeyToMap(axe::KeyCode::DELETE);
-		AddKeyToMap(axe::KeyCode::RIGHT);
-		AddKeyToMap(axe::KeyCode::LEFT);
-		AddKeyToMap(axe::KeyCode::DOWN);
-		AddKeyToMap(axe::KeyCode::UP);
-		AddKeyToMap(axe::KeyCode::PAGE_UP);
-		AddKeyToMap(axe::KeyCode::PAGE_DOWN);
-		AddKeyToMap(axe::KeyCode::HOME);
-		AddKeyToMap(axe::KeyCode::END);
-		AddKeyToMap(axe::KeyCode::CAPS_LOCK);
-		AddKeyToMap(axe::KeyCode::SCROLL_LOCK);
-		AddKeyToMap(axe::KeyCode::NUM_LOCK);
-		AddKeyToMap(axe::KeyCode::PRINT_SCREEN);
-		AddKeyToMap(axe::KeyCode::PAUSE);
-		AddKeyToMap(axe::KeyCode::F1);
-		AddKeyToMap(axe::KeyCode::F2);
-		AddKeyToMap(axe::KeyCode::F3);
-		AddKeyToMap(axe::KeyCode::F4);
-		AddKeyToMap(axe::KeyCode::F5);
-		AddKeyToMap(axe::KeyCode::F6);
-		AddKeyToMap(axe::KeyCode::F7);
-		AddKeyToMap(axe::KeyCode::F8);
-		AddKeyToMap(axe::KeyCode::F9);
-		AddKeyToMap(axe::KeyCode::F10);
-		AddKeyToMap(axe::KeyCode::F11);
-		AddKeyToMap(axe::KeyCode::F12);
-		AddKeyToMap(axe::KeyCode::F13);
-		AddKeyToMap(axe::KeyCode::F14);
-		AddKeyToMap(axe::KeyCode::F15);
-		AddKeyToMap(axe::KeyCode::F16);
-		AddKeyToMap(axe::KeyCode::F17);
-		AddKeyToMap(axe::KeyCode::F18);
-		AddKeyToMap(axe::KeyCode::F19);
-		AddKeyToMap(axe::KeyCode::F20);
-		AddKeyToMap(axe::KeyCode::F21);
-		AddKeyToMap(axe::KeyCode::F22);
-		AddKeyToMap(axe::KeyCode::F23);
-		AddKeyToMap(axe::KeyCode::F24);
-		AddKeyToMap(axe::KeyCode::F25);
-		AddKeyToMap(axe::KeyCode::KP_Num0);
-		AddKeyToMap(axe::KeyCode::KP_Num1);
-		AddKeyToMap(axe::KeyCode::KP_Num2);
-		AddKeyToMap(axe::KeyCode::KP_Num3);
-		AddKeyToMap(axe::KeyCode::KP_Num4);
-		AddKeyToMap(axe::KeyCode::KP_Num5);
-		AddKeyToMap(axe::KeyCode::KP_Num6);
-		AddKeyToMap(axe::KeyCode::KP_Num7);
-		AddKeyToMap(axe::KeyCode::KP_Num8);
-		AddKeyToMap(axe::KeyCode::KP_Num9);
-		AddKeyToMap(axe::KeyCode::KP_DECIMAL);
-		AddKeyToMap(axe::KeyCode::KP_DIVIDE);
-		AddKeyToMap(axe::KeyCode::KP_MULTIPLY);
-		AddKeyToMap(axe::KeyCode::KP_SUBTRACT);
-		AddKeyToMap(axe::KeyCode::KP_ADD);
-		AddKeyToMap(axe::KeyCode::KP_ENTER);
-		AddKeyToMap(axe::KeyCode::KP_EQUAL);
-		AddKeyToMap(axe::KeyCode::LEFT_SHIFT);
-		AddKeyToMap(axe::KeyCode::LEFT_CONTROL);
-		AddKeyToMap(axe::KeyCode::LEFT_ALT);
-		AddKeyToMap(axe::KeyCode::RIGHT_SHIFT);
-		AddKeyToMap(axe::KeyCode::RIGHT_CONTROL);
-		AddKeyToMap(axe::KeyCode::RIGHT_ALT);
+		AddKeyToMap(Axe::KeyCode::SPACE);
+		AddKeyToMap(Axe::KeyCode::APOSTROPHE);
+		AddKeyToMap(Axe::KeyCode::COMMA);
+		AddKeyToMap(Axe::KeyCode::MINUS);
+		AddKeyToMap(Axe::KeyCode::PERIOD);
+		AddKeyToMap(Axe::KeyCode::SLASH);
+		AddKeyToMap(Axe::KeyCode::Num0);
+		AddKeyToMap(Axe::KeyCode::Num1);
+		AddKeyToMap(Axe::KeyCode::Num2);
+		AddKeyToMap(Axe::KeyCode::Num3);
+		AddKeyToMap(Axe::KeyCode::Num4);
+		AddKeyToMap(Axe::KeyCode::Num5);
+		AddKeyToMap(Axe::KeyCode::Num6);
+		AddKeyToMap(Axe::KeyCode::Num7);
+		AddKeyToMap(Axe::KeyCode::Num8);
+		AddKeyToMap(Axe::KeyCode::Num9);
+		AddKeyToMap(Axe::KeyCode::SEMICOLON);
+		AddKeyToMap(Axe::KeyCode::EQUAL);
+		AddKeyToMap(Axe::KeyCode::A);
+		AddKeyToMap(Axe::KeyCode::B);
+		AddKeyToMap(Axe::KeyCode::C);
+		AddKeyToMap(Axe::KeyCode::D);
+		AddKeyToMap(Axe::KeyCode::E);
+		AddKeyToMap(Axe::KeyCode::F);
+		AddKeyToMap(Axe::KeyCode::G);
+		AddKeyToMap(Axe::KeyCode::H);
+		AddKeyToMap(Axe::KeyCode::I);
+		AddKeyToMap(Axe::KeyCode::J);
+		AddKeyToMap(Axe::KeyCode::K);
+		AddKeyToMap(Axe::KeyCode::L);
+		AddKeyToMap(Axe::KeyCode::M);
+		AddKeyToMap(Axe::KeyCode::N);
+		AddKeyToMap(Axe::KeyCode::O);
+		AddKeyToMap(Axe::KeyCode::P);
+		AddKeyToMap(Axe::KeyCode::Q);
+		AddKeyToMap(Axe::KeyCode::R);
+		AddKeyToMap(Axe::KeyCode::S);
+		AddKeyToMap(Axe::KeyCode::T);
+		AddKeyToMap(Axe::KeyCode::U);
+		AddKeyToMap(Axe::KeyCode::V);
+		AddKeyToMap(Axe::KeyCode::W);
+		AddKeyToMap(Axe::KeyCode::X);
+		AddKeyToMap(Axe::KeyCode::Y);
+		AddKeyToMap(Axe::KeyCode::Z);
+		AddKeyToMap(Axe::KeyCode::LEFT_BRACKET);
+		AddKeyToMap(Axe::KeyCode::BACKSLASH);
+		AddKeyToMap(Axe::KeyCode::RIGHT_BRACKET);
+		AddKeyToMap(Axe::KeyCode::ACCENT);
+		AddKeyToMap(Axe::KeyCode::ESCAPE);
+		AddKeyToMap(Axe::KeyCode::ENTER);
+		AddKeyToMap(Axe::KeyCode::TAB);
+		AddKeyToMap(Axe::KeyCode::BACKSPACE);
+		AddKeyToMap(Axe::KeyCode::INSERT);
+		AddKeyToMap(Axe::KeyCode::DELETE);
+		AddKeyToMap(Axe::KeyCode::RIGHT);
+		AddKeyToMap(Axe::KeyCode::LEFT);
+		AddKeyToMap(Axe::KeyCode::DOWN);
+		AddKeyToMap(Axe::KeyCode::UP);
+		AddKeyToMap(Axe::KeyCode::PAGE_UP);
+		AddKeyToMap(Axe::KeyCode::PAGE_DOWN);
+		AddKeyToMap(Axe::KeyCode::HOME);
+		AddKeyToMap(Axe::KeyCode::END);
+		AddKeyToMap(Axe::KeyCode::CAPS_LOCK);
+		AddKeyToMap(Axe::KeyCode::SCROLL_LOCK);
+		AddKeyToMap(Axe::KeyCode::NUM_LOCK);
+		AddKeyToMap(Axe::KeyCode::PRINT_SCREEN);
+		AddKeyToMap(Axe::KeyCode::PAUSE);
+		AddKeyToMap(Axe::KeyCode::F1);
+		AddKeyToMap(Axe::KeyCode::F2);
+		AddKeyToMap(Axe::KeyCode::F3);
+		AddKeyToMap(Axe::KeyCode::F4);
+		AddKeyToMap(Axe::KeyCode::F5);
+		AddKeyToMap(Axe::KeyCode::F6);
+		AddKeyToMap(Axe::KeyCode::F7);
+		AddKeyToMap(Axe::KeyCode::F8);
+		AddKeyToMap(Axe::KeyCode::F9);
+		AddKeyToMap(Axe::KeyCode::F10);
+		AddKeyToMap(Axe::KeyCode::F11);
+		AddKeyToMap(Axe::KeyCode::F12);
+		AddKeyToMap(Axe::KeyCode::F13);
+		AddKeyToMap(Axe::KeyCode::F14);
+		AddKeyToMap(Axe::KeyCode::F15);
+		AddKeyToMap(Axe::KeyCode::F16);
+		AddKeyToMap(Axe::KeyCode::F17);
+		AddKeyToMap(Axe::KeyCode::F18);
+		AddKeyToMap(Axe::KeyCode::F19);
+		AddKeyToMap(Axe::KeyCode::F20);
+		AddKeyToMap(Axe::KeyCode::F21);
+		AddKeyToMap(Axe::KeyCode::F22);
+		AddKeyToMap(Axe::KeyCode::F23);
+		AddKeyToMap(Axe::KeyCode::F24);
+		AddKeyToMap(Axe::KeyCode::F25);
+		AddKeyToMap(Axe::KeyCode::KP_Num0);
+		AddKeyToMap(Axe::KeyCode::KP_Num1);
+		AddKeyToMap(Axe::KeyCode::KP_Num2);
+		AddKeyToMap(Axe::KeyCode::KP_Num3);
+		AddKeyToMap(Axe::KeyCode::KP_Num4);
+		AddKeyToMap(Axe::KeyCode::KP_Num5);
+		AddKeyToMap(Axe::KeyCode::KP_Num6);
+		AddKeyToMap(Axe::KeyCode::KP_Num7);
+		AddKeyToMap(Axe::KeyCode::KP_Num8);
+		AddKeyToMap(Axe::KeyCode::KP_Num9);
+		AddKeyToMap(Axe::KeyCode::KP_DECIMAL);
+		AddKeyToMap(Axe::KeyCode::KP_DIVIDE);
+		AddKeyToMap(Axe::KeyCode::KP_MULTIPLY);
+		AddKeyToMap(Axe::KeyCode::KP_SUBTRACT);
+		AddKeyToMap(Axe::KeyCode::KP_ADD);
+		AddKeyToMap(Axe::KeyCode::KP_ENTER);
+		AddKeyToMap(Axe::KeyCode::KP_EQUAL);
+		AddKeyToMap(Axe::KeyCode::LEFT_SHIFT);
+		AddKeyToMap(Axe::KeyCode::LEFT_CONTROL);
+		AddKeyToMap(Axe::KeyCode::LEFT_ALT);
+		AddKeyToMap(Axe::KeyCode::RIGHT_SHIFT);
+		AddKeyToMap(Axe::KeyCode::RIGHT_CONTROL);
+		AddKeyToMap(Axe::KeyCode::RIGHT_ALT);
+
+		AddMouseButtonToMap(Axe::MouseButton::LEFT_BUTTON);
+		AddMouseButtonToMap(Axe::MouseButton::MIDDLE_BUTTON);
+		AddMouseButtonToMap(Axe::MouseButton::RIGHT_BUTTON);
+		AddMouseButtonToMap(Axe::MouseButton::EXTRA_BUTTON1);
+		AddMouseButtonToMap(Axe::MouseButton::EXTRA_BUTTON2);
+		AddMouseButtonToMap(Axe::MouseButton::EXTRA_BUTTON3);
+		AddMouseButtonToMap(Axe::MouseButton::EXTRA_BUTTON4);
+		AddMouseButtonToMap(Axe::MouseButton::LAST_BUTTON);
+
 	}
 
-	void InputManager::AddKeyToMap(axe::KeyCode Key)
+	void InputManager::AddKeyToMap(Axe::KeyCode Key)
 	{
-		_Keys[Key] = axe::InputKey(Key);
+		_Keys[Key] = Axe::InputKey(Key);
+	}
+
+	void InputManager::AddMouseButtonToMap(Axe::MouseButton Button)
+	{
+		_MouseButtons[Button] = Axe::InputMouseButton(Button);
 	}
 }
