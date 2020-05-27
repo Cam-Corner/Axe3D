@@ -7,7 +7,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-
 namespace Axe
 {
 	class Model
@@ -36,7 +35,9 @@ namespace Axe
 		void LoadModel(std::string Path);
 		void ProcessNode(aiNode* Node, const aiScene* Scene);
 		Mesh ProcessMesh(aiMesh* Mesh, const aiScene* Scene);
-		std::vector<sTexture> LoadMaterialTextures(aiMaterial* Material, aiTextureType Type, std::string TypeName);
+		std::vector<sTexture> LoadMaterialTextures(aiMaterial* Material, aiTextureType Type, std::string TypeName, bool& HasDiffuseTexture, bool& HasSpecularTexture);
+
+		sMaterial LoadMaterial(aiMaterial* Material);
 
 		unsigned int TextureFromFile(const char* Path, const std::string& Directory, bool Gamma = false);
 	};

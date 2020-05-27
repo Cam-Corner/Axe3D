@@ -13,16 +13,18 @@ namespace Axe
 	class Application
 	{
 	public:
-		Application();
+		void Run();
 		virtual ~Application();
 
-		void Run();
-
 	protected:
+		//makes the class abstract so it can't be created. Means it has to be inhereted 
+		Application();
+		
+		
 		///<Summary>
 		///This function will be run before the game loop starts
 		///</Summary>
-		virtual void GameStart() = 0;
+		virtual void Start() = 0;
 
 		///<Summary>
 		///This is the game loop that will be run once per frame
@@ -32,7 +34,7 @@ namespace Axe
 		///<Summary>
 		///this will be run after the game has ended
 		///</Summary>
-		virtual void GameEnd() = 0;
+		virtual void End() = 0;
 
 	private:
 		

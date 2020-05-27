@@ -62,6 +62,9 @@ namespace Axe
 		std::vector<unsigned int> Indices;
 		std::vector<sTexture> Textures;
 
+		bool HasDiffuseTexture = false;
+		bool HasSpecularTexture = false;
+
 		for (unsigned int i = 0; i < Mesh->mNumVertices; i++)
 		{
 			sVertex Vertex;
@@ -97,25 +100,36 @@ namespace Axe
 			}
 		}
 
+		sMaterial TempMaterial;
+
 		if (Mesh->mMaterialIndex >= 0)
 		{
 			aiMaterial* Material = Scene->mMaterials[Mesh->mMaterialIndex];
 			
-			std::vector<sTexture> DiffuseMaps = LoadMaterialTextures(Material, aiTextureType_DIFFUSE, "Texture_Diffuse");
+			std::vector<sTexture> DiffuseMaps = LoadMaterialTextures(Material, aiTextureType_DIFFUSE, "Texture_Diffuse", HasDiffuseTexture, HasSpecularTexture);
 			Textures.insert(Textures.end(), DiffuseMaps.begin(), DiffuseMaps.end());
 
-			std::vector<sTexture> SpecularMaps = LoadMaterialTextures(Material, aiTextureType_SPECULAR, "Texture_Specular");
+			std::vector<sTexture> SpecularMaps = LoadMaterialTextures(Material, aiTextureType_SPECULAR, "Texture_Specular", HasDiffuseTexture, HasSpecularTexture);
 			Textures.insert(Textures.end(), SpecularMaps.begin(), SpecularMaps.end());
+
+
+			TempMaterial = LoadMaterial(Material);
 		}
 		else
 		{
 
 		}
 
-		return Axe::Mesh(Vertices, Indices, Textures);
+		Axe::Mesh TempMesh(Vertices, Indices, Textures);
+
+		TempMaterial.HasDiffuseTexture = HasDiffuseTexture;
+		TempMaterial.HasSpecularTexture = HasSpecularTexture;
+		TempMesh._Material = TempMaterial;
+
+		return TempMesh;
 	}
 
-	std::vector<sTexture> Model::LoadMaterialTextures(aiMaterial* Material, aiTextureType Type, std::string TypeName)
+	std::vector<sTexture> Model::LoadMaterialTextures(aiMaterial* Material, aiTextureType Type, std::string TypeName, bool& HasDiffuseTexture, bool& HasSpecularTexture)
 	{
 		std::vector<sTexture> Textures;
 
@@ -125,6 +139,16 @@ namespace Axe
 			Material->GetTexture(Type, i, &string);
 			bool Skip = false;
 			
+			if (Type == aiTextureType_DIFFUSE)
+			{
+				HasDiffuseTexture = true;
+			}
+
+			if (Type == aiTextureType_SPECULAR)
+			{
+				HasSpecularTexture = true;
+			}
+
 			for (auto Texture : Textures_Loaded)
 			{
 				if (std::strcmp(Texture.Path.data(), string.C_Str()) == 0)
@@ -144,8 +168,30 @@ namespace Axe
 				Textures_Loaded.push_back(Texture);
 			}
 		}
-		
+
 		return Textures;
+	}
+
+	sMaterial Model::LoadMaterial(aiMaterial* Material)
+	{
+		sMaterial TempMaterial;
+
+		aiColor3D Colour(0, 0, 0);
+		float Shininess;
+
+		Material->Get(AI_MATKEY_COLOR_DIFFUSE, Colour);
+		TempMaterial.Diffuse = glm::vec3(Colour.r, Colour.g, Colour.b);
+
+		Material->Get(AI_MATKEY_COLOR_AMBIENT, Colour);
+		TempMaterial.Ambient = glm::vec3(Colour.r, Colour.g, Colour.b);
+
+		Material->Get(AI_MATKEY_COLOR_SPECULAR, Colour);
+		TempMaterial.Specular = glm::vec3(Colour.r, Colour.g, Colour.b);
+
+		Material->Get(AI_MATKEY_SHININESS, Shininess);
+		TempMaterial.Shininess = Shininess;
+
+		return TempMaterial;
 	}
 
 	void Model::Draw(Axe::Shader Shader)

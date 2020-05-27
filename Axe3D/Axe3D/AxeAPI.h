@@ -7,3 +7,4 @@
 #include "Camera.h"
 #include "ModelManager.h"
 #include "StaticMesh.h"
+#include "Light.h"

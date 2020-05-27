@@ -53,8 +53,8 @@ namespace Axe
 
 	void Mesh::Draw(Axe::Shader Shader)
 	{
-		unsigned int DiffuseNum = 1;
-		unsigned int SpecularNum = 1;
+		unsigned int DiffuseNum = 0;
+		unsigned int SpecularNum = 0;
 
 		for (unsigned int i = 0; i < _Textures.size(); i++)
 		{
@@ -77,6 +77,13 @@ namespace Axe
 			Shader.SetFloat("Material." + TextureName + TextureNum, i);
 			glBindTexture(GL_TEXTURE_2D, _Textures[i].ID);
 		}
+
+		Shader.SetVec3("Material.Diffuse", _Material.Diffuse);
+		Shader.SetVec3("Material.Specular", _Material.Specular);
+		Shader.SetVec3("Material.Ambient", _Material.Ambient);
+		Shader.SetFloat("Material.Shininess", _Material.Shininess);
+		Shader.SetBool("Material.HasDiffuseTexture0", _Material.HasDiffuseTexture);
+		Shader.SetBool("Material.HasSpecularTexture0", _Material.HasSpecularTexture);
 
 		glBindVertexArray(_VAO);
 		glDrawElements(GL_TRIANGLES, _Indices.size(), GL_UNSIGNED_INT, 0);

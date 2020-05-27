@@ -47,6 +47,9 @@ namespace Axe
 		static void SetWindowResolution(unsigned int Width, unsigned int Height) { Get().SetWindowResolutionImp(Width, Height); }
 		static void SetFullScreen(bool Value) { Get().SetFullScreenImp(Value); }
 
+		static void SetWindowTitle(std::string Title) { Get().SetWindowTitleImp(Title); }
+		static std::string GetWindowTitle() { return Get().GetWindowTitleImp(); }
+
 	private:
 		bool IsOpenImp();
 		void ClearImp();
@@ -55,6 +58,10 @@ namespace Axe
 		glm::vec2 GetScreenResolutionImp() { return glm::vec2(_ScreenWidth, _ScreenHeight); }
 
 		Axe::Camera* GetActiveCameraImp() { if (_ActiveCamera != NULL) return _ActiveCamera; }
+
+
+		void SetWindowTitleImp(std::string Title) { _WindowTitle = Title; }
+		std::string GetWindowTitleImp() { return _WindowTitle; }
 
 		//WindowSettings
 		void SetWindowResolutionImp(unsigned int Width, unsigned int Height);
@@ -72,10 +79,7 @@ namespace Axe
 			}
 		}
 
-		GLFWwindow* _Window; //GLFW Window
-
-		int _ScreenWidth{ 720 };//stores the screen width
-		int _ScreenHeight{ 480 };//stores the screen height
+		
 
 		bool SetupGLFW(std::string WindowName);//sets up GLFW
 		bool SetupGlad();//sets up GLAD
@@ -85,5 +89,14 @@ namespace Axe
 		void ClampValue(int Min, int Max, int& Value);
 
 		Axe::Camera* _ActiveCamera;
+
+	private:
+		GLFWwindow* _Window; //GLFW Window
+
+		int _ScreenWidth{ 720 }; //stores the screen width
+		int _ScreenHeight{ 480 };//stores the screen height
+
+		std::string _WindowTitle{"Title Not Set"};
+
 	};
 }

@@ -7,12 +7,12 @@ namespace Axe
 {
 	StaticMesh::StaticMesh()
 	{
-		Axe::ModelManager::AddStaticMesh(this);
+		
 	}
 
 	StaticMesh::~StaticMesh()
 	{
-		Axe::ModelManager::RemoveStaticMesh(this);
+		
 	}
 
 	bool StaticMesh::SetModel(Axe::Model* Model)
@@ -40,43 +40,31 @@ namespace Axe
 
 		return true;
 	}
-
-	glm::mat4 StaticMesh::GetModelMatrix()
+	
+	bool StaticMesh::Draw(Axe::Shader& Shader)
 	{
-		glm::mat4 Model = glm::mat4(1.0f);
-		Model = glm::translate(Model, _Position);
-	    Model = glm::rotate(Model, 0.0f, _Rotation);
-		Model = glm::scale(Model, _Scale);
-
-		return Model;
-	}
-
-	void StaticMesh::SetShader(Axe::Shader* Shader)
-	{
-		if (Shader != NULL)
+		if (_Model != NULL)
 		{
-			_Shader = Shader;
-		}
-	}
+			Shader.UseProgram();
 
-	bool StaticMesh::Draw()
-	{
-		if (_Shader != NULL)
-		{
-			_Shader->UseProgram();
-			
 			glm::mat4 Projection = Axe::RenderWindow::GetActiveCamera()->GetProjectionMatrix();
-			_Shader->SetMat4("Projection", Projection);
+			Shader.SetMat4("Projection", Projection);
 
 			glm::mat4 View = Axe::RenderWindow::GetActiveCamera()->GetViewMatrix();
-			_Shader->SetMat4("View", View);
+			Shader.SetMat4("View", View);
 
-			glm::mat4 Model = GetModelMatrix();
-			_Shader->SetMat4("Model", Model);
+			glm::mat4 Model = _Transform.GetTransformMatrix();
+			Shader.SetMat4("Model", Model);
 
-			_Model->Draw(*_Shader);
+			_Model->Draw(Shader);
 
 			return true;
+		}
+		else
+		{
+			std::cout << "ERROR::STATIC::MESH: Static Mesh has no mesh attached! \n";
+
+			return false;
 		}
 
 		std::cout << "ERROR::STATIC::MESH: Static Mesh has no shader! \n";

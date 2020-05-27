@@ -3,6 +3,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "Shader.h"
+#include <unordered_map>
 
 namespace Axe
 {
@@ -20,6 +21,16 @@ namespace Axe
 		std::string Path;
 	};
 
+	struct sMaterial
+	{
+		bool HasDiffuseTexture = false;
+		bool HasSpecularTexture = false;
+		glm::vec3 Diffuse{ 0, 0, 0 };
+		glm::vec3 Specular{ 0, 0, 0 };
+		glm::vec3 Ambient{ 0, 0, 0 };
+		float Shininess;
+	};
+
 	class Mesh
 	{
 	public:
@@ -29,6 +40,8 @@ namespace Axe
 		std::vector<sVertex> _Vertices;
 		std::vector<unsigned int> _Indices;
 		std::vector<sTexture> _Textures;
+
+		sMaterial _Material;
 
 		void Draw(Axe::Shader Shader);
 

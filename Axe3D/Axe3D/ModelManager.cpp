@@ -55,34 +55,4 @@ namespace Axe
 		_Models.empty();
 	}
 
-	void ModelManager::DrawStaticMeshesImp()
-	{
-		for (auto SM : _StaticMeshesNeedingToBeDrawn)
-		{
-			if (SM->GetModel() != NULL)
-			{
-				SM->Draw();
-			}
-		}
-	}
-
-	void ModelManager::AddStaticMeshImp(Axe::StaticMesh* StaticMesh)
-	{
-		_StaticMeshesNeedingToBeDrawn.push_back(StaticMesh);
-	}
-
-	void ModelManager::RemoveStaticMeshImp(Axe::StaticMesh* StaticMesh)
-	{
-		for (int i = 0; i < _StaticMeshesNeedingToBeDrawn.size(); i++)
-		{
-			if (_StaticMeshesNeedingToBeDrawn[i] == StaticMesh)
-			{
-				_StaticMeshesNeedingToBeDrawn.erase(_StaticMeshesNeedingToBeDrawn.begin(),
-													_StaticMeshesNeedingToBeDrawn.begin() + i);
-
-				break;
-			}
-		}
-	}
-
 }

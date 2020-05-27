@@ -16,24 +16,25 @@ namespace Axe
 	void Application::Run()
 	{
 		//Set up the window / OpenGL Before doing anything else
-		Axe::RenderWindow::Create(1280, 720, "Axe 3D | FPS: 0");
+		Axe::RenderWindow::Create(1280, 720, Axe::RenderWindow::GetWindowTitle());
 		Axe::InputManager::Update();
 		Axe::ModelManager::Get();
 		srand(time(NULL));
 
 		//Call game start
-		GameStart();
+		Start();
 
 		//Update Loop
 		std::cout << "Axe3D STARTED! \n";
 		while (Axe::RenderWindow::IsOpen())
 		{
+
 			Axe::RenderWindow::Clear();
 			Axe::InputManager::Update();
-
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			if (glfwGetTime() > _CurrentTime)
 			{
-				std::string TitleName = "Axe 3D   |    FPS: " + std::to_string(_FPS);
+				std::string TitleName = Axe::RenderWindow::GetWindowTitle() + " " + std::to_string(_FPS);
 				glfwSetWindowTitle(Axe::RenderWindow::GetGLFWWindow(), TitleName.c_str());
 
 				_FPS = 0;
@@ -47,7 +48,7 @@ namespace Axe
 			////
 
 			//Draw Everything
-			Axe::ModelManager::DrawStaticMeshes();
+			//Axe::ModelManager::DrawStaticMeshes();
 
 			//swap buffer
 			Axe::RenderWindow::SwapBuffers();
@@ -55,7 +56,7 @@ namespace Axe
 
 
 		//Call Game End
-		GameEnd();
+		End();
 
 	}
 

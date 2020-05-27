@@ -2,52 +2,91 @@
 
 out vec4 FragmentColour;
 
+in vec2 TextCoords;
+in vec3 VertexPositionPassed;
+in vec3 VertexNormalPassed;
+
 struct sMaterial
 {
-	sampler2D Texture_Diffuse1;
-	sampler2D Texture_Diffuse2;
-	sampler2D Texture_Diffuse3;
-	sampler2D Texture_Diffuse4;
-	sampler2D Texture_Diffuse5;
-	sampler2D Texture_Diffuse6;
+	sampler2D Texture_Diffuse0;	
+	bool HasDiffuseTexture0;
 	
-	sampler2D Texture_Specular1;
-	sampler2D Texture_Specular2;
-	sampler2D Texture_Specular3;
-	sampler2D Texture_Specular4;
-	sampler2D Texture_Specular5;
-	sampler2D Texture_Specular6;
+	sampler2D Texture_Specular0;
+	bool HasSpecularTexture0;
+	
+	vec3 Diffuse;
+	vec3 Specular;
+	vec3 Ambient;
+	float Shininess;
 };
 
-int AmountOfDiffuse = 6;
-int AmountOfSpecular = 6;
+struct sLight
+{
+	vec3 Intensity;
+	vec3 Position;
+	float Range;
+};
 
-uniform sampler2D Texture_Diffuse1;
+uniform sLight Light[50];
+uniform int NumberOfLights;
+uniform vec3 AmbientLightIntensity;
 
 uniform sMaterial Material;
 
-in vec2 TextCoords;
+vec4 LightCalculation(sLight Light);
 
-vec4 AddTextures();
 void main()
-{
-	//FragmentColour = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+{	
+	vec4 FinalDiffuseAndSpecularColour;
+	
+	for(int i = 0; i < NumberOfLights; i++)
+	{	
+		FinalDiffuseAndSpecularColour += LightCalculation(Light[i]);
+	}	
+	vec4 FinalAmbientColour;
+
+	if(Material.HasDiffuseTexture0)
+	{
+		FinalAmbientColour= vec4((AmbientLightIntensity), 1) * texture(Material.Texture_Diffuse0, TextCoords);
+	}
+	else
+	{
+		FinalAmbientColour = vec4((AmbientLightIntensity * Material.Diffuse), 1);
+	}
+	
+	vec4 FinalColour = FinalAmbientColour + FinalDiffuseAndSpecularColour;
 	
 	
-	
-	FragmentColour = AddTextures();
-	
+	FragmentColour = FinalColour;	
 }
 
-vec4 AddTextures()
+
+vec4 LightCalculation(sLight Light)
 {
-	vec4 FinalColour;
+	//Calculate attenuation
+	float Attenuation = smoothstep(Light.Range, Light.Range / 2, length(Light.Position - VertexPositionPassed));
 	
-	FinalColour = texture(Material.Texture_Diffuse1, TextCoords);
+	vec4 Diffuse;
+	vec4 Specular;
 	
-	FinalColour = texture(Material.Texture_Specular1, TextCoords);
+	//Calculate Diffuse
+	vec3 N = normalize (VertexNormalPassed);
+	vec3 L = normalize(Light.Position - VertexPositionPassed);
 	
-	return FinalColour;
+	float Diffuse_Intensity = max(0, dot(L, N));
+	
+	if(Material.HasDiffuseTexture0)
+	{
+		Diffuse = texture(Material.Texture_Diffuse0, TextCoords) * vec4(Light.Intensity * Material.Diffuse * Diffuse_Intensity, 1);
+	}
+	else
+	{
+		Diffuse = vec4(Light.Intensity * Material.Diffuse * Diffuse_Intensity, 1);
+	}	
+	
+	vec4 FinalColour = (Diffuse + Specular) * Attenuation;
+	
+	return FinalColour;	
 }
 
 

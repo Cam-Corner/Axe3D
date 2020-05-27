@@ -39,17 +39,6 @@ namespace Axe
 		void RemoveAllModelsImp();
 
 		std::unordered_map<std::string, Axe::Model> _Models;
-
-		
-		
-		static void DrawStaticMeshes() { Get().DrawStaticMeshesImp(); }
-		static void AddStaticMesh(Axe::StaticMesh* StaticMesh) { Get().AddStaticMeshImp(StaticMesh); }
-		static void RemoveStaticMesh(Axe::StaticMesh* StaticMesh) { Get().RemoveStaticMeshImp(StaticMesh); }
-
-		void DrawStaticMeshesImp();
-		void AddStaticMeshImp(Axe::StaticMesh* StaticMesh);
-		void RemoveStaticMeshImp(Axe::StaticMesh* StaticMesh);
-		std::vector<Axe::StaticMesh*> _StaticMeshesNeedingToBeDrawn;
 	};
 }
 

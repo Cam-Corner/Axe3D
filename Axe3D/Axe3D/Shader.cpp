@@ -7,13 +7,13 @@
 
 namespace Axe
 {
-	Shader::Shader(std::string fVertexShaderLocation, std::string fFragmentShaderLocation)
+	Shader::Shader(std::string VertexShaderLocation, std::string FragmentShaderLocation)
 	{
 		std::string VSLine;
 		std::string VSCode;
 		std::ifstream VSFile;
 
-		VSFile.open(fVertexShaderLocation);
+		VSFile.open(VertexShaderLocation);
 		if (VSFile.is_open())
 		{
 			while (VSFile)
@@ -35,7 +35,7 @@ namespace Axe
 		std::string FSCode;
 		std::ifstream FSFile;
 
-		FSFile.open(fFragmentShaderLocation);
+		FSFile.open(FragmentShaderLocation);
 		if (FSFile.is_open())
 		{
 			while (FSFile)
@@ -68,7 +68,7 @@ namespace Axe
 		if (!Success)
 		{
 			glGetShaderInfoLog(VertexShader, 512, NULL, InfoLog);
-			std::cout << "SHADER::ERROR: VERTEX SHADER COMpILATION FAILED! \n " << InfoLog << "\n";
+			std::cout << "SHADER::ERROR: VERTEX SHADER COMPILATION FAILED! \n " << InfoLog << "\n";
 		}
 
 		//set up fragment shader
@@ -84,15 +84,15 @@ namespace Axe
 			std::cout << "SHADER::ERROR: FRAGMENT SHADER COMPILATION FAILED! \n " << InfoLog << "\n";
 		}
 
-		m_ShaderProgramID = glCreateProgram();
-		glAttachShader(m_ShaderProgramID, VertexShader);
-		glAttachShader(m_ShaderProgramID, FragmentShader);
-		glLinkProgram(m_ShaderProgramID);
+		_ShaderProgramID = glCreateProgram();
+		glAttachShader(_ShaderProgramID, VertexShader);
+		glAttachShader(_ShaderProgramID, FragmentShader);
+		glLinkProgram(_ShaderProgramID);
 
-		glGetProgramiv(m_ShaderProgramID, GL_LINK_STATUS, &Success);
+		glGetProgramiv(_ShaderProgramID, GL_LINK_STATUS, &Success);
 		if (!Success)
 		{
-			glGetProgramInfoLog(m_ShaderProgramID, 512, NULL, InfoLog);
+			glGetProgramInfoLog(_ShaderProgramID, 512, NULL, InfoLog);
 			std::cout << "SHADER::ERROR: PROGRAM LINK FAILED! \n " << InfoLog << "\n";
 		}
 
@@ -120,27 +120,35 @@ namespace Axe
 
 	void Shader::UseProgram()
 	{
-		glUseProgram(m_ShaderProgramID);
+		glUseProgram(_ShaderProgramID);
 	}
 
-	void Shader::SetInt(std::string fVariableName, int fValue) const
+	void Shader::SetInt(std::string UniformName, int Value) const
 	{
-
+		GLuint IntLocation = glGetUniformLocation(_ShaderProgramID, UniformName.c_str());
+		glUniform1i(IntLocation, Value);
 	}
 
-	void Shader::SetBool(std::string fVariableName, bool fValue) const
+	void Shader::SetBool(std::string UniformName, bool Value) const
 	{
-
+		GLuint BoolLocation = glGetUniformLocation(_ShaderProgramID, UniformName.c_str());
+		glUniform1i(BoolLocation, Value);
 	}
 
-	void Shader::SetFloat(std::string fVariableName, float fValue) const
+	void Shader::SetFloat(std::string UniformName, float Value) const
 	{
-		glUniform1f(glGetUniformLocation(m_ShaderProgramID, fVariableName.c_str()), fValue);
+		glUniform1f(glGetUniformLocation(_ShaderProgramID, UniformName.c_str()), Value);
 	}
 
-	void Shader::SetMat4(std::string fUniformName, glm::mat4& fMat4) const
+	void Shader::SetVec3(std::string UniformName, glm::vec3 Value) const
 	{
-		int Mat4Location = glGetUniformLocation(m_ShaderProgramID, fUniformName.c_str());
-		glUniformMatrix4fv(Mat4Location, 1, GL_FALSE,  glm::value_ptr(fMat4));
+		GLuint Vec3Location = glGetUniformLocation(_ShaderProgramID, UniformName.c_str());
+		glUniform3fv(Vec3Location, 1, glm::value_ptr(Value));
+	}
+
+	void Shader::SetMat4(std::string UniformName, glm::mat4& Mat4) const
+	{
+		int Mat4Location = glGetUniformLocation(_ShaderProgramID, UniformName.c_str());
+		glUniformMatrix4fv(Mat4Location, 1, GL_FALSE,  glm::value_ptr(Mat4));
 	}
 }

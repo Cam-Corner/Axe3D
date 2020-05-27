@@ -9,9 +9,15 @@ uniform mat4 View;
 uniform mat4 Projection;
 
 out vec2 TextCoords;
+out vec3 VertexPositionPassed;
+out vec3 VertexNormalPassed;
 
 void main()
 {
-	gl_Position = Projection * View * Model * vec4(LPos, 1.0f);
+	
+	VertexNormalPassed = mat3(Model) * normalize(LNormal);
+	VertexPositionPassed = mat4x3(Model) * vec4(LPos, 1.0f);
 	TextCoords = LTextCoords;
-}
+	
+	gl_Position = Projection * View * Model * vec4(LPos, 1.0f);
+}   
